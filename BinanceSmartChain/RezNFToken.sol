@@ -15,14 +15,11 @@ contract RezNFToken is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Own
 
     Counters.Counter private _tokenIdCounter;
     
-    address contractAddress;
 
-    constructor(address marketplaceAddress) ERC721("RezNFToken", "REZ") {
-        contractAddress = marketplaceAddress;
-    }
+    constructor() ERC721("RezNFToken", "REZ") {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://utad-input.s3.amazonaws.com/rez/meta/";
+        return "https://dev.playrez.com/";
     }
 
     function pause() public onlyOwner {
@@ -33,12 +30,12 @@ contract RezNFToken is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Own
         _unpause();
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri, address marketAddress) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-        setApprovalForAll(contractAddress, true);
+        setApprovalForAll(marketAddress, true);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
